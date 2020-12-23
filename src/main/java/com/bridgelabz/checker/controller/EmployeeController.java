@@ -37,6 +37,7 @@ public class EmployeeController {
 
 	@PostMapping("/employees")
 	public Employee createEmployee(@RequestBody Employee employee) {
+//		System.out.println("Added ===> " + employee.toString());
 		return employeeRepository.save(employee);
 	}
 
@@ -47,13 +48,21 @@ public class EmployeeController {
 		return ResponseEntity.ok(employee);
 	}
 
+	@GetMapping("/employees/department/{id}")
+	public List<String> getEmployeeDepartmentById(@PathVariable long id) {
+		return employeeRepository.findDepartmentsById(id);
+	}
+
 	@PutMapping("/employees/{id}")
 	public ResponseEntity<Employee> updateEmployee(@PathVariable long id, @RequestBody Employee updatedEmployee) {
 		Employee employee = employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(
 				"-----------Employee with id: " + id + " doesn't exist!!-----------"));
 		employee.setFirstName(updatedEmployee.getFirstName());
 		employee.setLastName(updatedEmployee.getLastName());
+		employee.setGender(updatedEmployee.getGender());
+		employee.setDepartment(updatedEmployee.getDepartment());
 		employee.setEmailId(updatedEmployee.getEmailId());
+		employee.setStartDate(updatedEmployee.getStartDate());
 		employee.setSalary(updatedEmployee.getSalary());
 		employee.setNote(updatedEmployee.getNote());
 		employee.setProfilePic(updatedEmployee.getProfilePic());
